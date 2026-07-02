@@ -1,9 +1,15 @@
 "use client";
 
 import { Github, Linkedin, Mail, Terminal } from "lucide-react";
-import { navLinks, profile } from "@/lib/data";
+import type { NavLink, Profile } from "@/lib/types";
 
-export function Footer() {
+export function Footer({
+  navLinks,
+  profile,
+}: {
+  navLinks: NavLink[];
+  profile: Profile;
+}) {
   return (
     <footer className="relative border-t border-white/10">
       <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8">

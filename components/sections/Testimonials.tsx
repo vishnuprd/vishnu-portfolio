@@ -3,10 +3,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Quote, ChevronLeft, ChevronRight } from "lucide-react";
-import { testimonials } from "@/lib/data";
+import type { Testimonial } from "@/lib/types";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
-export function Testimonials() {
+export function Testimonials({
+  testimonials,
+}: {
+  testimonials: Testimonial[];
+}) {
   const [index, setIndex] = useState(0);
   const [dir, setDir] = useState(1);
 

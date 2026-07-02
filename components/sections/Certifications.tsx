@@ -2,11 +2,15 @@
 
 import { motion } from "framer-motion";
 import { Award } from "lucide-react";
-import { certifications } from "@/lib/data";
+import type { Certification } from "@/lib/types";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Stagger, staggerItem } from "@/components/ui/Reveal";
 
-export function Certifications() {
+export function Certifications({
+  certifications,
+}: {
+  certifications: Certification[];
+}) {
   return (
     <section id="certifications" className="section-pad scroll-mt-24">
       <SectionHeading

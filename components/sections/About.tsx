@@ -1,13 +1,13 @@
 "use client";
 
 import { CheckCircle2 } from "lucide-react";
-import { about, stats } from "@/lib/data";
+import type { About as AboutType, Stat } from "@/lib/types";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal, Stagger, staggerItem } from "@/components/ui/Reveal";
 import { Counter } from "@/components/ui/Counter";
 import { motion } from "framer-motion";
 
-export function About() {
+export function About({ about, stats }: { about: AboutType; stats: Stat[] }) {
   return (
     <section id="about" className="section-pad scroll-mt-24">
       <SectionHeading

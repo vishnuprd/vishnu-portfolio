@@ -15,7 +15,7 @@ import {
   Linkedin,
   Sparkles,
 } from "lucide-react";
-import { heroTyping, heroBadges, profile } from "@/lib/data";
+import type { Profile } from "@/lib/types";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { CodeScene } from "@/components/CodeScene";
 import { Particles } from "@/components/Particles";
@@ -51,8 +51,8 @@ function useTyping(words: string[]) {
   return text;
 }
 
-export function Hero() {
-  const typed = useTyping(heroTyping);
+export function Hero({ profile }: { profile: Profile }) {
+  const typed = useTyping(profile.heroTyping);
   const ref = useRef<HTMLDivElement>(null);
 
   // mouse-based parallax
@@ -234,7 +234,7 @@ export function Hero() {
       <div className="absolute inset-x-0 bottom-6 z-10">
         <div className="mask-fade-x flex overflow-hidden">
           <div className="flex shrink-0 animate-marquee gap-3 pr-3">
-            {[...heroBadges, ...heroBadges].map((b, i) => (
+            {[...profile.heroBadges, ...profile.heroBadges].map((b, i) => (
               <span
                 key={i}
                 className="whitespace-nowrap rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-medium text-white/60 backdrop-blur"

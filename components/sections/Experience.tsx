@@ -3,10 +3,14 @@
 import { useRef } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { Briefcase, MapPin, TrendingUp } from "lucide-react";
-import { experience } from "@/lib/data";
+import type { Experience as ExperienceType } from "@/lib/types";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
-export function Experience() {
+export function Experience({
+  experience,
+}: {
+  experience: ExperienceType[];
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
