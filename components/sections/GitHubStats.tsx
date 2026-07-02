@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Github, GitCommit, GitPullRequest, Star, Flame } from "lucide-react";
-import { profile } from "@/lib/data";
+import type { Profile } from "@/lib/types";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 
@@ -40,7 +40,7 @@ const kpis = [
   { icon: Flame, label: "Longest Streak", value: "38 days" },
 ];
 
-export function GitHubStats() {
+export function GitHubStats({ profile }: { profile: Profile }) {
   return (
     <section id="github" className="section-pad scroll-mt-24">
       <SectionHeading

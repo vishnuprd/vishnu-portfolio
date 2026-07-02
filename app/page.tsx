@@ -19,32 +19,43 @@ import { Testimonials } from "@/components/sections/Testimonials";
 import { Blog } from "@/components/sections/Blog";
 import { Contact } from "@/components/sections/Contact";
 
-export default function Home() {
+import { getSiteContent } from "@/lib/content";
+
+// Admin saves revalidate this instantly; this is just a safety-net refresh
+// for content changed directly in the Supabase dashboard.
+export const revalidate = 3600;
+
+export default async function Home() {
+  const content = await getSiteContent();
+
   return (
     <>
       <Preloader />
       <SmoothScroll />
       <Background />
       <Cursor />
-      <Navbar />
+      <Navbar navLinks={content.navLinks} profile={content.profile} />
       <BackToTop />
       <ThemeSwitcher />
 
       <main id="main" className="relative">
-        <Hero />
-        <About />
-        <Skills />
-        <Experience />
-        <Projects />
-        <SystemDesign />
-        <GitHubStats />
-        <Certifications />
-        <Testimonials />
-        <Blog />
-        <Contact />
+        <Hero profile={content.profile} />
+        <About about={content.about} stats={content.stats} />
+        <Skills skillGroups={content.skillGroups} />
+        <Experience experience={content.experience} />
+        <Projects projects={content.projects} />
+        <SystemDesign
+          architectureLayers={content.architectureLayers}
+          designPillars={content.designPillars}
+        />
+        <GitHubStats profile={content.profile} />
+        <Certifications certifications={content.certifications} />
+        <Testimonials testimonials={content.testimonials} />
+        <Blog blogPosts={content.blogPosts} />
+        <Contact profile={content.profile} />
       </main>
 
-      <Footer />
+      <Footer navLinks={content.navLinks} profile={content.profile} />
     </>
   );
 }

@@ -1,12 +1,3 @@
-import {
-  Code2,
-  Server,
-  Database,
-  Cloud,
-  Wrench,
-  type LucideIcon,
-} from "lucide-react";
-
 /* ------------------------------------------------------------------ */
 /*  PROFILE — edit these to update contact links across the whole site */
 /* ------------------------------------------------------------------ */
@@ -73,13 +64,13 @@ export const stats: { label: string; value: number; suffix: string }[] = [
 /* ------------------------------------------------------------------ */
 export const skillGroups: {
   title: string;
-  icon: LucideIcon;
+  icon: string;
   accent: string;
   skills: string[];
 }[] = [
   {
     title: "Frontend",
-    icon: Code2,
+    icon: "Code2",
     accent: "from-sky-400 to-blue-600",
     skills: [
       "React",
@@ -104,7 +95,7 @@ export const skillGroups: {
   },
   {
     title: "Backend",
-    icon: Server,
+    icon: "Server",
     accent: "from-violet-400 to-purple-600",
     skills: [
       "Node.js",
@@ -126,7 +117,7 @@ export const skillGroups: {
   },
   {
     title: "Database",
-    icon: Database,
+    icon: "Database",
     accent: "from-cyan-400 to-teal-500",
     skills: [
       "PostgreSQL",
@@ -141,7 +132,7 @@ export const skillGroups: {
   },
   {
     title: "DevOps & Cloud",
-    icon: Cloud,
+    icon: "Cloud",
     accent: "from-fuchsia-400 to-pink-600",
     skills: [
       "Docker",
@@ -159,7 +150,7 @@ export const skillGroups: {
   },
   {
     title: "Tools & Practice",
-    icon: Wrench,
+    icon: "Wrench",
     accent: "from-amber-400 to-orange-600",
     skills: [
       "Git & GitHub",

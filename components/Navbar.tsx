@@ -3,9 +3,15 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
 import { Menu, X, Terminal } from "lucide-react";
-import { navLinks, profile } from "@/lib/data";
+import type { NavLink, Profile } from "@/lib/types";
 
-export function Navbar() {
+export function Navbar({
+  navLinks,
+  profile,
+}: {
+  navLinks: NavLink[];
+  profile: Profile;
+}) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState<string>("");

@@ -10,11 +10,9 @@ import {
   Lightbulb,
   Gauge,
 } from "lucide-react";
-import { projects } from "@/lib/data";
+import type { Project } from "@/lib/types";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Stagger, staggerItem } from "@/components/ui/Reveal";
-
-type Project = (typeof projects)[number];
 
 function ProjectVisual({ p }: { p: Project }) {
   return (
@@ -44,7 +42,7 @@ function ProjectVisual({ p }: { p: Project }) {
   );
 }
 
-export function Projects() {
+export function Projects({ projects }: { projects: Project[] }) {
   const [active, setActive] = useState<Project | null>(null);
 
   return (

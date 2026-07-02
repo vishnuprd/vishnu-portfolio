@@ -13,25 +13,25 @@ import {
   CheckCircle2,
   Loader2,
 } from "lucide-react";
-import { profile } from "@/lib/data";
+import type { Profile } from "@/lib/types";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 
 type Status = "idle" | "sending" | "sent";
 
-const contactItems = [
-  { icon: Mail, label: "Email", value: profile.email, href: `mailto:${profile.email}` },
-  { icon: Phone, label: "Phone", value: profile.phone, href: `tel:${profile.phone.replace(/\s/g, "")}` },
-  { icon: MapPin, label: "Location", value: profile.location, href: undefined },
-];
+export function Contact({ profile }: { profile: Profile }) {
+  const contactItems = [
+    { icon: Mail, label: "Email", value: profile.email, href: `mailto:${profile.email}` },
+    { icon: Phone, label: "Phone", value: profile.phone, href: `tel:${profile.phone.replace(/\s/g, "")}` },
+    { icon: MapPin, label: "Location", value: profile.location, href: undefined },
+  ];
 
-const socials = [
-  { icon: Github, label: "GitHub", href: profile.github },
-  { icon: Linkedin, label: "LinkedIn", href: profile.linkedin },
-  { icon: Calendar, label: "Calendly", href: profile.calendly },
-];
+  const socials = [
+    { icon: Github, label: "GitHub", href: profile.github },
+    { icon: Linkedin, label: "LinkedIn", href: profile.linkedin },
+    { icon: Calendar, label: "Calendly", href: profile.calendly },
+  ];
 
-export function Contact() {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
 

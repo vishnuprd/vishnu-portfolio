@@ -1,11 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { skillGroups } from "@/lib/data";
+import type { SkillGroup } from "@/lib/types";
+import { getIcon } from "@/lib/icons";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Stagger, staggerItem } from "@/components/ui/Reveal";
 
-export function Skills() {
+export function Skills({ skillGroups }: { skillGroups: SkillGroup[] }) {
   return (
     <section id="skills" className="section-pad scroll-mt-24">
       <SectionHeading
@@ -16,7 +17,7 @@ export function Skills() {
 
       <Stagger className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {skillGroups.map((group) => {
-          const Icon = group.icon;
+          const Icon = getIcon(group.icon);
           return (
             <motion.div
               key={group.title}

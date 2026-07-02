@@ -13,7 +13,7 @@ import {
   ChevronDown,
   type LucideIcon,
 } from "lucide-react";
-import { architectureLayers, designPillars } from "@/lib/data";
+import type { ArchitectureLayer, DesignPillar } from "@/lib/types";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Stagger, staggerItem } from "@/components/ui/Reveal";
 
@@ -28,7 +28,13 @@ const icons: Record<string, LucideIcon> = {
   Rocket,
 };
 
-export function SystemDesign() {
+export function SystemDesign({
+  architectureLayers,
+  designPillars,
+}: {
+  architectureLayers: ArchitectureLayer[];
+  designPillars: DesignPillar[];
+}) {
   return (
     <section id="system-design" className="section-pad scroll-mt-24">
       <SectionHeading

@@ -2,11 +2,11 @@
 
 import { motion } from "framer-motion";
 import { ArrowUpRight, Clock } from "lucide-react";
-import { blogPosts } from "@/lib/data";
+import type { BlogPost } from "@/lib/types";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Stagger, staggerItem } from "@/components/ui/Reveal";
 
-export function Blog() {
+export function Blog({ blogPosts }: { blogPosts: BlogPost[] }) {
   return (
     <section id="blog" className="section-pad scroll-mt-24">
       <SectionHeading
