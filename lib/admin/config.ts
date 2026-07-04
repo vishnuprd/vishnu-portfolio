@@ -22,6 +22,8 @@ export type Field = {
   type: FieldType;
   placeholder?: string;
   help?: string;
+  rows?: number; // textarea height (defaults to 4)
+  mono?: boolean; // monospace font — good for Markdown / code bodies
 };
 
 export type SectionKind = "singleton" | "collection";
@@ -235,7 +237,22 @@ export const SECTIONS: SectionConfig[] = [
     subtitleField: "tag",
     fields: [
       { name: "title", label: "Title", type: "text" },
+      {
+        name: "slug",
+        label: "URL slug",
+        type: "text",
+        placeholder: "advanced-react-patterns",
+        help: "The page address: /blog/your-slug. Lowercase, words-separated-by-hyphens. Leave blank to keep the card non-clickable.",
+      },
       { name: "excerpt", label: "Excerpt", type: "textarea" },
+      {
+        name: "content",
+        label: "Article body (Markdown)",
+        type: "textarea",
+        rows: 24,
+        mono: true,
+        help: "The full post in Markdown. Supports # headings, **bold**, ```code blocks```, lists, links, tables, ```mermaid``` diagrams, and raw HTML callouts.",
+      },
       { name: "tag", label: "Tag", type: "text" },
       { name: "read", label: "Read time", type: "text", placeholder: "8 min" },
       { name: "date", label: "Date", type: "text", placeholder: "2026" },

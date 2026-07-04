@@ -143,6 +143,31 @@ export const getSiteContent = cache(async (): Promise<SiteContent> => {
   }
 });
 
+/**
+ * Fetch a single blog post by its URL slug. Returns null if not found.
+ * Falls back to the hardcoded defaults when Supabase isn't configured.
+ */
+export const getBlogPost = cache(
+  async (slug: string): Promise<BlogPost | null> => {
+    if (!isSupabaseConfigured) {
+      return defaults.blogPosts.find((p) => p.slug === slug) ?? null;
+    }
+    try {
+      const supabase = createPublicClient();
+      const { data } = await supabase
+        .from("blog_posts")
+        .select("*")
+        .eq("slug", slug)
+        .maybeSingle();
+      if (data) return mapBlog(data);
+      return defaults.blogPosts.find((p) => p.slug === slug) ?? null;
+    } catch (err) {
+      console.error("[content] getBlogPost failed:", err);
+      return defaults.blogPosts.find((p) => p.slug === slug) ?? null;
+    }
+  },
+);
+
 /* ------------------------------------------------------------------ */
 /*  Row → app-shape mappers (snake_case DB → camelCase app types)     */
 /* ------------------------------------------------------------------ */
@@ -236,7 +261,9 @@ function mapBlog(r: any): BlogPost {
   return {
     id: r.id,
     title: r.title,
+    slug: r.slug ?? "",
     excerpt: r.excerpt,
+    content: r.content ?? "",
     tag: r.tag,
     read: r.read,
     date: r.date,

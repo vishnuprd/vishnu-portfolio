@@ -124,13 +124,19 @@ create table if not exists public.testimonials (
 create table if not exists public.blog_posts (
   id uuid primary key default gen_random_uuid(),
   title text not null default '',
+  slug text not null default '',
   excerpt text not null default '',
+  content text not null default '',
   tag text not null default '',
   read text not null default '',
   date text not null default '',
   sort_order integer not null default 0,
   created_at timestamptz not null default now()
 );
+
+-- If the table already exists from an earlier version, add the new columns.
+alter table public.blog_posts add column if not exists slug text not null default '';
+alter table public.blog_posts add column if not exists content text not null default '';
 
 create table if not exists public.nav_links (
   id uuid primary key default gen_random_uuid(),

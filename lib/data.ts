@@ -1,3 +1,10 @@
+import { advancedReactPatterns } from "@/lib/posts/advanced-react-patterns";
+import { scalingNodejsRedis } from "@/lib/posts/scaling-nodejs-redis";
+import { optimizingNextjsPerformance } from "@/lib/posts/optimizing-nextjs-performance";
+import { designingMultitenantSaas } from "@/lib/posts/designing-multitenant-saas";
+import { databaseOptimizationIndexing } from "@/lib/posts/database-optimization-indexing";
+import { authenticationNextauthRbac } from "@/lib/posts/authentication-nextauth-rbac";
+
 /* ------------------------------------------------------------------ */
 /*  PROFILE — edit these to update contact links across the whole site */
 /* ------------------------------------------------------------------ */
@@ -489,48 +496,60 @@ export const testimonials = [
 export const blogPosts = [
   {
     title: "Advanced React Patterns for Scalable UIs",
+    slug: "advanced-react-patterns",
     excerpt:
       "Compound components, headless hooks and server components — patterns that keep large React codebases maintainable.",
+    content: advancedReactPatterns,
     tag: "React",
     read: "8 min",
     date: "2026",
   },
   {
     title: "Scaling Node.js Applications with Redis",
+    slug: "scaling-nodejs-redis",
     excerpt:
       "How caching hot reads and offloading queues kept our order dashboards responsive under production load.",
+    content: scalingNodejsRedis,
     tag: "Backend",
     read: "10 min",
     date: "2026",
   },
   {
     title: "Optimizing Next.js Performance & Core Web Vitals",
+    slug: "optimizing-nextjs-performance",
     excerpt:
       "Streaming, partial prerendering, image optimization and lazy hydration for image-heavy dashboards.",
+    content: optimizingNextjsPerformance,
     tag: "Next.js",
     read: "7 min",
     date: "2025",
   },
   {
     title: "Designing Multi-tenant SaaS Architecture",
+    slug: "designing-multitenant-saas",
     excerpt:
       "Row-level security, tenant isolation and role-based access — lessons from building a live PropTech platform.",
+    content: designingMultitenantSaas,
     tag: "System Design",
     read: "12 min",
     date: "2025",
   },
   {
     title: "Database Optimization: Indexing & Query Tuning",
+    slug: "database-optimization-indexing",
     excerpt:
       "Practical indexing strategies in PostgreSQL that turned slow reports into instant reports.",
+    content: databaseOptimizationIndexing,
     tag: "Database",
     read: "9 min",
     date: "2025",
   },
   {
     title: "Authentication Best Practices with NextAuth & RBAC",
+    slug: "authentication-nextauth-rbac",
     excerpt:
       "Sessions, JWTs, OAuth and role-based access control done right in modern Next.js apps.",
+    content: authenticationNextauthRbac,
     tag: "Security",
     read: "8 min",
     date: "2025",
