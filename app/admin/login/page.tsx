@@ -2,7 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Lock, Loader2, Terminal, AlertCircle } from "lucide-react";
+import { Lock, Loader2, Terminal, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 
@@ -15,6 +15,7 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -80,15 +81,29 @@ function LoginForm() {
 
           <label className="mt-4 block text-xs font-medium text-white/60">
             Password
-            <input
-              type="password"
-              required
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1.5 w-full rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white outline-none transition-colors focus:border-sky-400/60"
-              placeholder="••••••••"
-            />
+            <div className="relative mt-1.5">
+              <input
+                type={showPassword ? "text" : "password"}
+                required
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2.5 pr-10 text-sm text-white outline-none transition-colors focus:border-sky-400/60"
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                className="absolute inset-y-0 right-0 grid w-10 place-items-center text-white/40 transition-colors hover:text-white/70"
+              >
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
+              </button>
+            </div>
           </label>
 
           <button

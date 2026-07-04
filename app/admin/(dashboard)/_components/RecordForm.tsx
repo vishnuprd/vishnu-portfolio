@@ -111,10 +111,12 @@ export function RecordForm({
           {f.type === "textarea" && (
             <textarea
               value={String(values[f.name] ?? "")}
-              rows={4}
+              rows={f.rows ?? 4}
               placeholder={f.placeholder}
               onChange={(e) => set(f.name, e.target.value)}
-              className={inputCls}
+              className={`${inputCls} resize-y ${
+                f.mono ? "font-mono text-[13px] leading-relaxed" : ""
+              }`}
             />
           )}
 

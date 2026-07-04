@@ -102,7 +102,9 @@ export type Testimonial = {
 export type BlogPost = {
   id?: string;
   title: string;
+  slug: string;
   excerpt: string;
+  content: string;
   tag: string;
   read: string;
   date: string;
