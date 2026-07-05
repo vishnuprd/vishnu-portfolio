@@ -100,7 +100,7 @@ export function Contact({ profile }: { profile: Profile }) {
 
           <div className="rounded-2xl glass p-5">
             <div className="text-sm font-medium text-white">Find me online</div>
-            <div className="mt-4 flex gap-3">
+            <div className="mt-4 flex flex-wrap gap-2.5 sm:gap-3">
               {socials.map((s) => {
                 const Icon = s.icon;
                 return (
@@ -110,9 +110,9 @@ export function Contact({ profile }: { profile: Profile }) {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={s.label}
-                    className="grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-white/[0.03] text-white/70 transition-all duration-300 hover:-translate-y-1 hover:text-white hover:shadow-glow"
+                    className="grid h-10 w-10 place-items-center rounded-xl border border-white/10 bg-white/[0.03] text-white/70 transition-all duration-300 hover:-translate-y-1 hover:text-white hover:shadow-glow sm:h-11 sm:w-11"
                   >
-                    <Icon className="h-5 w-5" />
+                    <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
                   </a>
                 );
               })}
