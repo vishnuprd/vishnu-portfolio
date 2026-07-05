@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowUpRight,
@@ -12,11 +12,13 @@ import {
 } from "lucide-react";
 import type { Project } from "@/lib/types";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Stagger, staggerItem } from "@/components/ui/Reveal";
+import { Spotlight } from "@/components/ui/Spotlight";
+import { spring } from "@/lib/motion";
 
-function ProjectVisual({ p }: { p: Project }) {
+function ProjectVisual({ p, layoutId }: { p: Project; layoutId?: string }) {
   return (
-    <div
+    <motion.div
+      layoutId={layoutId}
       className={`relative flex h-40 items-end overflow-hidden rounded-2xl bg-gradient-to-br ${p.accent} p-4`}
     >
       <div className="absolute inset-0 bg-grid-faint [background-size:24px_24px] opacity-40" />
@@ -38,12 +40,36 @@ function ProjectVisual({ p }: { p: Project }) {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
 export function Projects({ projects }: { projects: Project[] }) {
   const [active, setActive] = useState<Project | null>(null);
+  const [filter, setFilter] = useState("All");
+
+  // Filter by tech tags shared across projects (categories are unique per
+  // project, so they'd make a useless one-result filter). Only surface techs
+  // that appear in 2+ projects so every chip is meaningful.
+  const filters = useMemo(() => {
+    const count = new Map<string, number>();
+    projects.forEach((p) =>
+      p.tech.forEach((t) => count.set(t, (count.get(t) ?? 0) + 1))
+    );
+    const shared = [...count.entries()]
+      .filter(([, n]) => n >= 2)
+      .sort((a, b) => b[1] - a[1])
+      .map(([t]) => t);
+    return ["All", ...shared];
+  }, [projects]);
+
+  const filtered = useMemo(
+    () =>
+      filter === "All"
+        ? projects
+        : projects.filter((p) => p.tech.includes(filter)),
+    [projects, filter]
+  );
 
   return (
     <section id="projects" className="section-pad scroll-mt-24">
@@ -53,19 +79,52 @@ export function Projects({ projects }: { projects: Project[] }) {
         subtitle="Real platforms across PropTech, operations and travel — each engineered for scale, security and speed."
       />
 
-      <Stagger className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {projects.map((p) => (
-          <motion.article
-            key={p.title}
-            variants={staggerItem}
-            whileHover={{ y: -8 }}
-            onClick={() => setActive(p)}
-            className="group flex cursor-pointer flex-col overflow-hidden rounded-3xl glass p-3 transition-all duration-300 hover:border-white/20 hover:shadow-card"
-            data-cursor="hover"
-          >
-            <ProjectVisual p={p} />
+      {/* category filter — active state slides via a shared layoutId */}
+      <div className="mb-10 flex flex-wrap justify-center gap-2">
+        {filters.map((cat) => {
+          const isActive = filter === cat;
+          return (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => setFilter(cat)}
+              className={`relative rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                isActive ? "text-white" : "text-white/55 hover:text-white"
+              }`}
+            >
+              {isActive && (
+                <motion.span
+                  layoutId="project-filter-pill"
+                  transition={spring.snappy}
+                  className="absolute inset-0 -z-10 rounded-full bg-accent shadow-glow"
+                />
+              )}
+              {cat}
+            </button>
+          );
+        })}
+      </div>
 
-            <div className="flex flex-1 flex-col p-4">
+      {/* grid reflows with layout animation as the filter changes */}
+      <motion.div layout className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <AnimatePresence mode="popLayout">
+          {filtered.map((p) => (
+            <motion.article
+              key={p.title}
+              layout
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={spring.soft}
+              whileHover={{ y: -8 }}
+              onClick={() => setActive(p)}
+              className="group relative flex cursor-pointer flex-col overflow-hidden rounded-3xl glass p-3 transition-colors duration-300 hover:border-white/20 hover:shadow-card"
+              data-cursor="hover"
+            >
+              <Spotlight />
+              <ProjectVisual p={p} layoutId={`pv-${p.title}`} />
+
+              <div className="flex flex-1 flex-col p-4">
               <span className="text-xs font-medium uppercase tracking-wider text-sky-300/80">
                 {p.category}
               </span>
@@ -88,10 +147,11 @@ export function Projects({ projects }: { projects: Project[] }) {
                   <span className="chip">+{p.tech.length - 4}</span>
                 )}
               </div>
-            </div>
-          </motion.article>
-        ))}
-      </Stagger>
+              </div>
+            </motion.article>
+          ))}
+        </AnimatePresence>
+      </motion.div>
 
       {/* modal */}
       <AnimatePresence>
@@ -105,22 +165,18 @@ export function Projects({ projects }: { projects: Project[] }) {
           >
             <div className="absolute inset-0 bg-black/70 backdrop-blur-md" />
             <motion.div
-              initial={{ opacity: 0, scale: 0.94, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.94, y: 20 }}
-              transition={{ type: "spring", stiffness: 260, damping: 26 }}
               onClick={(e) => e.stopPropagation()}
               className="glass-strong relative z-10 max-h-[88vh] w-full max-w-2xl overflow-y-auto rounded-3xl p-6 shadow-card sm:p-8"
             >
               <button
                 onClick={() => setActive(null)}
                 aria-label="Close"
-                className="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-full glass text-white/70 hover:text-white"
+                className="absolute right-4 top-4 z-10 grid h-9 w-9 place-items-center rounded-full glass text-white/70 hover:text-white"
               >
                 <X className="h-4 w-4" />
               </button>
 
-              <ProjectVisual p={active} />
+              <ProjectVisual p={active} layoutId={`pv-${active.title}`} />
 
               <span className="mt-5 inline-block text-xs font-medium uppercase tracking-wider text-sky-300/80">
                 {active.category} · {active.client}

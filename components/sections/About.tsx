@@ -5,6 +5,7 @@ import type { About as AboutType, Stat } from "@/lib/types";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal, Stagger, staggerItem } from "@/components/ui/Reveal";
 import { Counter } from "@/components/ui/Counter";
+import { Spotlight } from "@/components/ui/Spotlight";
 import { motion } from "framer-motion";
 
 export function About({ about, stats }: { about: AboutType; stats: Stat[] }) {
@@ -46,14 +47,17 @@ export function About({ about, stats }: { about: AboutType; stats: Stat[] }) {
               key={s.label}
               variants={staggerItem}
               whileHover={{ y: -6 }}
-              className={`glass rounded-2xl p-6 transition-shadow hover:shadow-glow ${
+              className={`group relative overflow-hidden rounded-2xl glass p-6 transition-shadow hover:shadow-glow ${
                 i === 0 ? "col-span-2" : ""
               }`}
             >
-              <div className="text-3xl font-bold text-gradient sm:text-4xl">
+              <Spotlight />
+              <div className="relative text-3xl font-bold text-gradient sm:text-4xl">
                 <Counter to={s.value} suffix={s.suffix} />
               </div>
-              <div className="mt-1.5 text-sm text-white/55">{s.label}</div>
+              <div className="relative mt-1.5 text-sm text-white/55">
+                {s.label}
+              </div>
             </motion.div>
           ))}
         </Stagger>

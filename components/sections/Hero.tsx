@@ -6,6 +6,7 @@ import {
   useMotionValue,
   useSpring,
   useTransform,
+  type Variants,
 } from "framer-motion";
 import {
   ArrowRight,
@@ -19,6 +20,21 @@ import type { Profile } from "@/lib/types";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { CodeScene } from "@/components/CodeScene";
 import { Particles } from "@/components/Particles";
+import { useAppReady } from "@/lib/loadState";
+import { ease } from "@/lib/motion";
+import { VelocityMarquee } from "@/components/ui/VelocityMarquee";
+import { DrawUnderline } from "@/components/ui/DrawUnderline";
+
+// Orchestrated entrance: the container holds children back until the preloader
+// dismisses (useAppReady), then reveals them in a staggered cascade.
+const container: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.09, delayChildren: 0.05 } },
+};
+const item: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: ease.out } },
+};
 
 function useTyping(words: string[]) {
   const [text, setText] = useState("");
@@ -54,6 +70,8 @@ function useTyping(words: string[]) {
 export function Hero({ profile }: { profile: Profile }) {
   const typed = useTyping(profile.heroTyping);
   const ref = useRef<HTMLDivElement>(null);
+  const ready = useAppReady();
+  const reveal = ready ? "show" : "hidden";
 
   // mouse-based parallax
   const mx = useMotionValue(0);
@@ -82,11 +100,14 @@ export function Hero({ profile }: { profile: Profile }) {
       <Particles className="opacity-70" />
       <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-14 px-5 sm:px-8 lg:grid-cols-[1.05fr_0.95fr]">
         {/* LEFT */}
-        <div className="relative z-10">
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate={reveal}
+          className="relative z-10"
+        >
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            variants={item}
             className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-xs font-medium text-white/70"
           >
             {profile.available && (
@@ -99,33 +120,32 @@ export function Hero({ profile }: { profile: Profile }) {
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.05 }}
+            variants={item}
             className="mt-6 text-4xl font-bold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl"
           >
             Building{" "}
-            <span className="text-gradient bg-gradient-animated animate-gradient-x">
-              Scalable
+            <span className="relative inline-block">
+              <span className="text-gradient bg-gradient-animated animate-gradient-x">
+                Scalable
+              </span>
+              <DrawUnderline delay={0.7} />
             </span>{" "}
             Digital Experiences with Modern Full Stack Technologies.
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.15 }}
+            variants={item}
             className="mt-6 max-w-xl text-base leading-relaxed text-white/55 sm:text-lg"
           >
             {profile.tagline} specializing in React, Next.js, TypeScript,
             Node.js, PostgreSQL, MongoDB, Docker, AWS and cloud architecture.
           </motion.p>
 
-          {/* typing line */}
+          {/* typing line — decorative; aria-hidden so screen readers aren't
+              spammed one character at a time. The real role lives in <h1>/<p>. */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.7, delay: 0.25 }}
+            variants={item}
+            aria-hidden
             className="mt-5 flex items-center gap-2 font-mono text-sm text-white/70"
           >
             <span className="text-emerald-400">const</span>
@@ -140,9 +160,7 @@ export function Hero({ profile }: { profile: Profile }) {
 
           {/* CTAs */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.35 }}
+            variants={item}
             className="mt-9 flex flex-wrap items-center gap-3"
           >
             <MagneticButton href="#projects" variant="primary">
@@ -157,12 +175,7 @@ export function Hero({ profile }: { profile: Profile }) {
           </motion.div>
 
           {/* socials */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.7, delay: 0.45 }}
-            className="mt-8 flex items-center gap-3"
-          >
+          <motion.div variants={item} className="mt-8 flex items-center gap-3">
             {[
               { icon: Github, href: profile.github, label: "GitHub" },
               { icon: Linkedin, href: profile.linkedin, label: "LinkedIn" },
@@ -180,13 +193,13 @@ export function Hero({ profile }: { profile: Profile }) {
               </a>
             ))}
           </motion.div>
-        </div>
+        </motion.div>
 
         {/* RIGHT — 3D code scene */}
         <motion.div
           initial={{ opacity: 0, scale: 0.92 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          animate={ready ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.92 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: ease.out }}
           style={{ perspective: 1200 }}
           className="relative hidden lg:block"
         >
@@ -230,20 +243,18 @@ export function Hero({ profile }: { profile: Profile }) {
         </motion.div>
       </div>
 
-      {/* marquee tech badges */}
+      {/* scroll-velocity-reactive marquee tech badges */}
       <div className="absolute inset-x-0 bottom-6 z-10">
-        <div className="mask-fade-x flex overflow-hidden">
-          <div className="flex shrink-0 animate-marquee gap-3 pr-3">
-            {[...profile.heroBadges, ...profile.heroBadges].map((b, i) => (
-              <span
-                key={i}
-                className="whitespace-nowrap rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-medium text-white/60 backdrop-blur"
-              >
-                {b}
-              </span>
-            ))}
-          </div>
-        </div>
+        <VelocityMarquee baseVelocity={1.6}>
+          {profile.heroBadges.map((b, i) => (
+            <span
+              key={i}
+              className="whitespace-nowrap rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-medium text-white/60 backdrop-blur"
+            >
+              {b}
+            </span>
+          ))}
+        </VelocityMarquee>
       </div>
     </section>
   );

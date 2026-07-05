@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import { getSiteContent } from "@/lib/content";
 
@@ -81,7 +82,10 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        {children}
+        {/* reducedMotion="user" disables transform/layout animations for users
+            who ask for it, while keeping opacity — a tasteful fallback, not a
+            hard off switch. Covers every Framer Motion component globally. */}
+        <MotionConfig reducedMotion="user">{children}</MotionConfig>
       </body>
     </html>
   );
