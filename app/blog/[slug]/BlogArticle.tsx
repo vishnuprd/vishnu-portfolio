@@ -5,6 +5,25 @@ import Script from "next/script";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
+
+/**
+ * Sanitization schema for blog HTML. rehypeRaw lets authors embed raw HTML
+ * in markdown; rehypeSanitize then strips anything dangerous (<script>,
+ * event handlers, javascript: URLs, inline styles) so a compromised or
+ * malicious post can't run code in a reader's browser. We extend the default
+ * schema only to keep className/id (for highlight.js + mermaid + heading
+ * anchors) and safe link attributes.
+ */
+const sanitizeSchema = {
+  ...defaultSchema,
+  attributes: {
+    ...defaultSchema.attributes,
+    "*": [...(defaultSchema.attributes?.["*"] ?? []), "className", "id"],
+    a: [...(defaultSchema.attributes?.a ?? []), "target", "rel"],
+    code: [...(defaultSchema.attributes?.code ?? []), "className"],
+  },
+};
 
 /** Flatten React children down to their plain text (for heading ids + code). */
 function toText(node: ReactNode): string {
@@ -161,7 +180,9 @@ export function BlogArticle({ content }: { content: string }) {
 
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeRaw]}
+        // Order matters: rehypeRaw first parses embedded HTML, then
+        // rehypeSanitize scrubs it. Reversing this would leave raw HTML unsanitized.
+        rehypePlugins={[rehypeRaw, [rehypeSanitize, sanitizeSchema]]}
         components={{
           h2({ children }) {
             return <h2 id={slugify(toText(children))}>{children}</h2>;
