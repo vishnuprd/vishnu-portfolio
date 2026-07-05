@@ -1,6 +1,7 @@
 "use client";
 
 import { Reveal } from "./Reveal";
+import { SplitText } from "./SplitText";
 
 export function SectionHeading({
   eyebrow,
@@ -33,11 +34,9 @@ export function SectionHeading({
           {eyebrow}
         </span>
       </Reveal>
-      <Reveal direction="up" delay={0.08}>
-        <h2 className="mt-5 text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl">
-          {title}
-        </h2>
-      </Reveal>
+      <h2 className="mt-5 text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl">
+        <SplitText text={title} per="word" delay={0.08} />
+      </h2>
       {subtitle && (
         <Reveal direction="up" delay={0.16}>
           <p

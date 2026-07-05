@@ -1,12 +1,18 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useInView } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { animate, useInView, useReducedMotion } from "framer-motion";
+import { duration as tokens, ease } from "@/lib/motion";
 
+/**
+ * Count-up that writes straight to the DOM node via animate()'s onUpdate —
+ * so it does NOT re-render React ~60×/sec the way a setState loop would.
+ * Respects reduced motion by jumping straight to the final value.
+ */
 export function Counter({
   to,
   suffix = "",
-  duration = 1800,
+  duration = tokens.slow,
 }: {
   to: number;
   suffix?: string;
@@ -14,27 +20,26 @@ export function Counter({
 }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.5 });
-  const [value, setValue] = useState(0);
+  const reduce = useReducedMotion();
 
   useEffect(() => {
-    if (!inView) return;
-    let raf = 0;
-    let start: number | null = null;
-    const step = (ts: number) => {
-      if (start === null) start = ts;
-      const p = Math.min((ts - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
-      setValue(Math.round(eased * to));
-      if (p < 1) raf = requestAnimationFrame(step);
-    };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
-  }, [inView, to, duration]);
+    const node = ref.current;
+    if (!node || !inView) return;
 
-  return (
-    <span ref={ref}>
-      {value}
-      {suffix}
-    </span>
-  );
+    if (reduce) {
+      node.textContent = `${to}${suffix}`;
+      return;
+    }
+
+    const controls = animate(0, to, {
+      duration,
+      ease: ease.out,
+      onUpdate: (v) => {
+        node.textContent = `${Math.round(v)}${suffix}`;
+      },
+    });
+    return () => controls.stop();
+  }, [inView, to, suffix, duration, reduce]);
+
+  return <span ref={ref}>0{suffix}</span>;
 }

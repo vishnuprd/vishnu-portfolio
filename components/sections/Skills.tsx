@@ -1,10 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
 import type { SkillGroup } from "@/lib/types";
 import { getIcon } from "@/lib/icons";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Stagger, staggerItem } from "@/components/ui/Reveal";
+import { TiltCard } from "@/components/ui/TiltCard";
 
 export function Skills({ skillGroups }: { skillGroups: SkillGroup[] }) {
   return (
@@ -19,18 +19,20 @@ export function Skills({ skillGroups }: { skillGroups: SkillGroup[] }) {
         {skillGroups.map((group) => {
           const Icon = getIcon(group.icon);
           return (
-            <motion.div
+            <TiltCard
               key={group.title}
               variants={staggerItem}
-              whileHover={{ y: -8 }}
-              className="group relative overflow-hidden rounded-3xl glass p-6 transition-all duration-300 hover:border-white/20"
+              className="overflow-hidden rounded-3xl glass p-6 transition-colors duration-300 hover:border-white/20"
             >
-              {/* hover glow */}
+              {/* corner glow */}
               <div
                 className={`pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-gradient-to-br ${group.accent} opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-30`}
               />
 
-              <div className="relative flex items-center gap-3">
+              <div
+                className="relative flex items-center gap-3"
+                style={{ transform: "translateZ(35px)" }}
+              >
                 <span
                   className={`grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br ${group.accent} text-white shadow-lg`}
                 >
@@ -46,7 +48,10 @@ export function Skills({ skillGroups }: { skillGroups: SkillGroup[] }) {
                 </div>
               </div>
 
-              <div className="relative mt-5 flex flex-wrap gap-2">
+              <div
+                className="relative mt-5 flex flex-wrap gap-2"
+                style={{ transform: "translateZ(20px)" }}
+              >
                 {group.skills.map((skill) => (
                   <span
                     key={skill}
@@ -56,7 +61,7 @@ export function Skills({ skillGroups }: { skillGroups: SkillGroup[] }) {
                   </span>
                 ))}
               </div>
-            </motion.div>
+            </TiltCard>
           );
         })}
       </Stagger>
