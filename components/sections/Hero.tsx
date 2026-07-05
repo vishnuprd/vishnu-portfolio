@@ -95,7 +95,7 @@ export function Hero({ profile }: { profile: Profile }) {
       id="hero"
       ref={ref}
       onMouseMove={onMove}
-      className="relative flex min-h-screen items-center overflow-hidden pt-28 md:pt-24"
+      className="relative flex min-h-screen items-center overflow-hidden pb-32 pt-28 sm:pb-28 md:pb-24 md:pt-24"
     >
       <Particles className="opacity-70" />
       <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-14 px-5 sm:px-8 lg:grid-cols-[1.05fr_0.95fr]">
@@ -175,7 +175,10 @@ export function Hero({ profile }: { profile: Profile }) {
           </motion.div>
 
           {/* socials */}
-          <motion.div variants={item} className="mt-8 flex items-center gap-3">
+          <motion.div
+            variants={item}
+            className="mt-8 flex flex-wrap items-center gap-2.5 sm:gap-3"
+          >
             {[
               { icon: Github, href: profile.github, label: "GitHub" },
               { icon: Linkedin, href: profile.linkedin, label: "LinkedIn" },
@@ -187,9 +190,9 @@ export function Hero({ profile }: { profile: Profile }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="grid h-11 w-11 place-items-center rounded-xl glass text-white/70 transition-all duration-300 hover:-translate-y-1 hover:text-white hover:shadow-glow"
+                className="grid h-10 w-10 place-items-center rounded-xl glass text-white/70 transition-all duration-300 hover:-translate-y-1 hover:text-white hover:shadow-glow sm:h-11 sm:w-11"
               >
-                <Icon className="h-5 w-5" />
+                <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
               </a>
             ))}
           </motion.div>
@@ -244,12 +247,12 @@ export function Hero({ profile }: { profile: Profile }) {
       </div>
 
       {/* scroll-velocity-reactive marquee tech badges */}
-      <div className="absolute inset-x-0 bottom-6 z-10">
+      <div className="absolute inset-x-0 bottom-4 z-10 sm:bottom-6">
         <VelocityMarquee baseVelocity={1.6}>
           {profile.heroBadges.map((b, i) => (
             <span
               key={i}
-              className="whitespace-nowrap rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-medium text-white/60 backdrop-blur"
+              className="whitespace-nowrap rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-[11px] font-medium text-white/60 backdrop-blur sm:px-4 sm:py-2 sm:text-xs"
             >
               {b}
             </span>
