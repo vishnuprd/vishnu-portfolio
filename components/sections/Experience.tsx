@@ -82,7 +82,7 @@ export function Experience({
                   <p className="text-sm font-medium text-white/70">
                     {job.company}
                   </p>
-                  <p className="mt-1 flex items-center gap-1.5 text-xs text-white/40">
+                  <p className="mt-1 flex items-center gap-1.5 text-xs text-white/60">
                     <MapPin className="h-3.5 w-3.5" /> {job.location}
                   </p>
 

@@ -24,7 +24,7 @@ function CertCard({ c }: { c: Certification }) {
       <h3 className="relative mt-4 text-base font-semibold text-white">
         {c.name}
       </h3>
-      <p className="relative mt-1 text-xs text-white/45">{c.issuer}</p>
+      <p className="relative mt-1 text-xs text-white/60">{c.issuer}</p>
     </motion.div>
   );
 }

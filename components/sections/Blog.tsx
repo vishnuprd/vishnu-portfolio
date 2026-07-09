@@ -34,7 +34,7 @@ export function Blog({ blogPosts }: { blogPosts: BlogPost[] }) {
                 <span className="chip border-sky-400/20 bg-sky-400/10 text-sky-300">
                   {post.tag}
                 </span>
-                <span className="flex items-center gap-1 text-xs text-white/40">
+                <span className="flex items-center gap-1 text-xs text-white/60">
                   <Clock className="h-3 w-3" /> {post.read}
                 </span>
               </div>
@@ -42,12 +42,12 @@ export function Blog({ blogPosts }: { blogPosts: BlogPost[] }) {
               <h3 className="mt-4 flex-1 text-lg font-semibold leading-snug text-white transition-colors group-hover:text-sky-200">
                 {post.title}
               </h3>
-              <p className="mt-3 text-sm leading-relaxed text-white/55">
+              <p className="mt-3 text-sm leading-relaxed text-white/70">
                 {post.excerpt}
               </p>
 
               <div className="mt-5 flex items-center justify-between border-t border-white/5 pt-4 text-sm">
-                <span className="text-white/40">{post.date}</span>
+                <span className="text-white/60">{post.date}</span>
                 {linked && (
                   <span className="inline-flex items-center gap-1 font-medium text-sky-300">
                     Read

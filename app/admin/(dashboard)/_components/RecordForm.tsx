@@ -189,7 +189,7 @@ export function RecordForm({
             />
           )}
 
-          {f.help && <p className="mt-1 text-xs text-white/40">{f.help}</p>}
+          {f.help && <p className="mt-1 text-xs text-white/60">{f.help}</p>}
         </div>
       ))}
 
@@ -204,7 +204,7 @@ export function RecordForm({
             onChange={(e) => set("sort_order", e.target.value)}
             className={`${inputCls} max-w-[120px]`}
           />
-          <p className="mt-1 text-xs text-white/40">
+          <p className="mt-1 text-xs text-white/60">
             Lower numbers appear first.
           </p>
         </div>

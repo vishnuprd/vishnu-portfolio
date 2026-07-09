@@ -53,7 +53,7 @@ function LoginForm() {
             <Terminal className="h-5 w-5 text-white" />
           </span>
           <h1 className="text-xl font-bold text-white">Admin Access</h1>
-          <p className="mt-1 text-sm text-white/45">
+          <p className="mt-1 text-sm text-white/60">
             Sign in to manage your portfolio content.
           </p>
         </div>
@@ -95,7 +95,7 @@ function LoginForm() {
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
                 aria-label={showPassword ? "Hide password" : "Show password"}
-                className="absolute inset-y-0 right-0 grid w-10 place-items-center text-white/40 transition-colors hover:text-white/70"
+                className="absolute inset-y-0 right-0 grid w-10 place-items-center text-white/60 transition-colors hover:text-white/70"
               >
                 {showPassword ? (
                   <EyeOff className="h-4 w-4" />
@@ -120,7 +120,7 @@ function LoginForm() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-xs text-white/30">
+        <p className="mt-6 text-center text-xs text-white/60">
           Protected area. Unauthorized access is prohibited.
         </p>
       </div>

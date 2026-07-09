@@ -58,7 +58,7 @@ export function Testimonials({
                 </span>
                 <div>
                   <div className="font-semibold text-white">{t.name}</div>
-                  <div className="text-sm text-white/50">{t.role}</div>
+                  <div className="text-sm text-white/65">{t.role}</div>
                 </div>
               </footer>
             </motion.blockquote>

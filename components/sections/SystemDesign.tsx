@@ -75,7 +75,7 @@ function FlowLayer({
         </span>
         <div>
           <div className="text-sm font-semibold text-white">{layer.label}</div>
-          <div className="text-xs text-white/45">{layer.detail}</div>
+          <div className="text-xs text-white/60">{layer.detail}</div>
         </div>
       </motion.div>
       {!last && (
@@ -170,7 +170,7 @@ export function SystemDesign({
                 <span className="mr-2 text-gradient">▹</span>
                 {pillar.title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-white/55">
+              <p className="mt-2 text-sm leading-relaxed text-white/70">
                 {pillar.body}
               </p>
             </motion.div>

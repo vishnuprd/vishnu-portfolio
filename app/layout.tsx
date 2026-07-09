@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import { headers } from "next/headers";
 import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import { getSiteContent } from "@/lib/content";
@@ -57,11 +58,15 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Nonce minted per-request by middleware; needed so this inline script is
+  // allowed under the nonce-based CSP (no more script-src 'unsafe-inline').
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
+
   return (
     <html
       lang="en"
@@ -70,6 +75,11 @@ export default function RootLayout({
     >
       <head>
         <script
+          nonce={nonce}
+          // Browsers strip the nonce attribute from the DOM after using it, so
+          // the hydrating client sees an empty nonce and would warn. The script
+          // has already run (it's blocking, pre-hydration) — suppress the noise.
+          suppressHydrationWarning
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem('portfolio-theme');if(t){document.documentElement.dataset.theme=t;}}catch(e){}})();`,
           }}

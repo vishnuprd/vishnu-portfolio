@@ -46,6 +46,38 @@ html {
   scroll-behavior: smooth;
   /* section offset is handled per-section via scroll-mt-* to avoid double-counting */
   scroll-padding-top: 0;
+  /* reserve the scrollbar's space so opening menus / modals don't shift layout */
+  scrollbar-gutter: stable;
+}
+
+/* Accessible keyboard focus — a single accent ring for anything focused via
+   keyboard. Mouse/touch focus stays clean (no ring), matching native
+   :focus-visible behaviour. */
+:focus-visible {
+  outline: 2px solid rgb(var(--a1) / 0.9);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---- Lenis smooth scroll ----
+   When <SmoothScroll> is active Lenis stamps these classes on <html>. Native
+   `scroll-behavior: smooth` must yield to Lenis's own interpolation, opt-out
+   regions use [data-lenis-prevent], and a stopped instance locks the page. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
 }
 
 body {
