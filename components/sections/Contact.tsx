@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import {
   Mail,
@@ -16,8 +16,8 @@ import {
 import type { Profile } from "@/lib/types";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
-
-type Status = "idle" | "sending" | "sent";
+import { submitContact } from "@/app/actions/contact";
+import { initialContactState } from "@/app/actions/contact-state";
 
 export function Contact({ profile }: { profile: Profile }) {
   const contactItems = [
@@ -32,36 +32,20 @@ export function Contact({ profile }: { profile: Profile }) {
     { icon: Calendar, label: "Calendly", href: profile.calendly },
   ];
 
-  const [status, setStatus] = useState<Status>("idle");
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [state, formAction, isPending] = useActionState(
+    submitContact,
+    initialContactState
+  );
+  const errors = state.errors ?? {};
+  const formRef = useRef<HTMLFormElement>(null);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const data = new FormData(form);
-    const next: Record<string, string> = {};
-    if (!String(data.get("name")).trim()) next.name = "Name is required";
-    const email = String(data.get("email")).trim();
-    if (!email) next.email = "Email is required";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-      next.email = "Enter a valid email";
-    if (!String(data.get("message")).trim())
-      next.message = "Message is required";
-
-    setErrors(next);
-    if (Object.keys(next).length) return;
-
-    setStatus("sending");
-    // Simulated submit — wire to your API / Resend / Formspree here.
-    setTimeout(() => {
-      setStatus("sent");
-      form.reset();
-      setTimeout(() => setStatus("idle"), 4000);
-    }, 1400);
-  }
+  // Clear the fields once a submit succeeds.
+  useEffect(() => {
+    if (state.status === "success") formRef.current?.reset();
+  }, [state.status]);
 
   const field =
-    "w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-all focus:border-sky-400/60 focus:bg-white/[0.05] focus:ring-2 focus:ring-sky-400/20";
+    "w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-white/60 outline-none transition-all focus:border-sky-400/60 focus:bg-white/[0.05] focus:ring-2 focus:ring-sky-400/20 aria-[invalid=true]:border-red-400/60 aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-red-400/20";
 
   return (
     <section id="contact" className="section-pad scroll-mt-24">
@@ -82,7 +66,7 @@ export function Contact({ profile }: { profile: Profile }) {
                   <Icon className="h-5 w-5" />
                 </span>
                 <div className="min-w-0">
-                  <div className="text-xs text-white/45">{c.label}</div>
+                  <div className="text-xs text-white/60">{c.label}</div>
                   <div className="truncate text-sm font-medium text-white">
                     {c.value}
                   </div>
@@ -123,87 +107,137 @@ export function Contact({ profile }: { profile: Profile }) {
         {/* form */}
         <Reveal direction="right">
           <form
-            onSubmit={handleSubmit}
+            ref={formRef}
+            action={formAction}
             noValidate
             className="rounded-3xl glass-strong p-6 sm:p-8"
           >
+            {/* Honeypot — hidden from humans, tempting to bots. Real users
+                leave it empty; a filled value is dropped server-side. */}
+            <div aria-hidden className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
+              <label>
+                Company
+                <input name="company" tabIndex={-1} autoComplete="off" />
+              </label>
+            </div>
+
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
-                <label className="mb-1.5 block text-sm text-white/70">
+                <label htmlFor="cf-name" className="mb-1.5 block text-sm text-white/70">
                   Name
                 </label>
-                <input name="name" placeholder="Jane Doe" className={field} />
+                <input
+                  id="cf-name"
+                  name="name"
+                  placeholder="Jane Doe"
+                  autoComplete="name"
+                  maxLength={100}
+                  defaultValue={state.values?.name}
+                  aria-invalid={!!errors.name}
+                  aria-describedby={errors.name ? "cf-name-err" : undefined}
+                  className={field}
+                />
                 {errors.name && (
-                  <p className="mt-1 text-xs text-red-400">{errors.name}</p>
+                  <p id="cf-name-err" className="mt-1 text-xs text-red-400">{errors.name}</p>
                 )}
               </div>
               <div>
-                <label className="mb-1.5 block text-sm text-white/70">
+                <label htmlFor="cf-email" className="mb-1.5 block text-sm text-white/70">
                   Email
                 </label>
                 <input
+                  id="cf-email"
                   name="email"
                   type="email"
                   placeholder="jane@company.com"
+                  autoComplete="email"
+                  maxLength={150}
+                  defaultValue={state.values?.email}
+                  aria-invalid={!!errors.email}
+                  aria-describedby={errors.email ? "cf-email-err" : undefined}
                   className={field}
                 />
                 {errors.email && (
-                  <p className="mt-1 text-xs text-red-400">{errors.email}</p>
+                  <p id="cf-email-err" className="mt-1 text-xs text-red-400">{errors.email}</p>
                 )}
               </div>
             </div>
 
             <div className="mt-5">
-              <label className="mb-1.5 block text-sm text-white/70">
+              <label htmlFor="cf-subject" className="mb-1.5 block text-sm text-white/70">
                 Subject
               </label>
               <input
+                id="cf-subject"
                 name="subject"
                 placeholder="Project inquiry"
+                maxLength={150}
+                defaultValue={state.values?.subject}
+                aria-invalid={!!errors.subject}
+                aria-describedby={errors.subject ? "cf-subject-err" : undefined}
                 className={field}
               />
+              {errors.subject && (
+                <p id="cf-subject-err" className="mt-1 text-xs text-red-400">{errors.subject}</p>
+              )}
             </div>
 
             <div className="mt-5">
-              <label className="mb-1.5 block text-sm text-white/70">
+              <label htmlFor="cf-message" className="mb-1.5 block text-sm text-white/70">
                 Message
               </label>
               <textarea
+                id="cf-message"
                 name="message"
                 rows={5}
                 placeholder="Tell me about your project or role…"
+                maxLength={5000}
+                defaultValue={state.values?.message}
+                aria-invalid={!!errors.message}
+                aria-describedby={errors.message ? "cf-message-err" : undefined}
                 className={`${field} resize-none`}
               />
               {errors.message && (
-                <p className="mt-1 text-xs text-red-400">{errors.message}</p>
+                <p id="cf-message-err" className="mt-1 text-xs text-red-400">{errors.message}</p>
               )}
             </div>
 
             <motion.button
               type="submit"
-              disabled={status !== "idle"}
+              disabled={isPending}
               whileTap={{ scale: 0.98 }}
               className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-white shadow-glow transition-all hover:shadow-glow-violet disabled:opacity-70 sm:w-auto"
             >
-              {status === "idle" && (
+              {isPending ? (
+                <>
+                  Sending… <Loader2 className="h-4 w-4 animate-spin" />
+                </>
+              ) : state.status === "success" ? (
+                <>
+                  Message sent <CheckCircle2 className="h-4 w-4" />
+                </>
+              ) : (
                 <>
                   Send Message <Send className="h-4 w-4" />
                 </>
               )}
-              {status === "sending" && (
-                <>
-                  Sending… <Loader2 className="h-4 w-4 animate-spin" />
-                </>
-              )}
-              {status === "sent" && (
-                <>
-                  Message sent <CheckCircle2 className="h-4 w-4" />
-                </>
-              )}
             </motion.button>
-            <p className="mt-3 text-xs text-white/35">
-              This demo form validates locally. Connect it to Resend, Formspree
-              or an API route to receive real messages.
+
+            {/* Status — announced to screen readers. */}
+            <p
+              role="status"
+              aria-live="polite"
+              className={`mt-3 min-h-[1.25rem] text-xs ${
+                state.status === "success"
+                  ? "text-emerald-400"
+                  : state.status === "error"
+                  ? "text-red-400"
+                  : "text-white/65"
+              }`}
+            >
+              {state.status === "idle"
+                ? "I usually reply within a day."
+                : state.message}
             </p>
           </form>
         </Reveal>

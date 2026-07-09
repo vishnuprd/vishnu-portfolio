@@ -31,7 +31,7 @@ export default async function AdminHome() {
   return (
     <div className="mx-auto max-w-4xl">
       <h1 className="text-2xl font-bold">Dashboard</h1>
-      <p className="mt-1 text-sm text-white/50">
+      <p className="mt-1 text-sm text-white/65">
         Manage every section of your portfolio. Changes go live immediately.
       </p>
 
@@ -55,7 +55,7 @@ export default async function AdminHome() {
       {isSupabaseConfigured && (
         <div className="mt-6 rounded-xl border border-white/10 bg-white/[0.02] p-5">
           <h2 className="text-sm font-semibold">First time here?</h2>
-          <p className="mt-1 text-sm text-white/50">
+          <p className="mt-1 text-sm text-white/65">
             Populate the database with your existing content, then edit anything
             below.
           </p>
@@ -81,16 +81,16 @@ export default async function AdminHome() {
                 <div className="flex items-center gap-2">
                   <h3 className="font-semibold">{s.label}</h3>
                   {s.kind === "collection" && counts[s.key] != null && (
-                    <span className="rounded-full bg-white/[0.08] px-2 py-0.5 text-[11px] text-white/50">
+                    <span className="rounded-full bg-white/[0.08] px-2 py-0.5 text-[11px] text-white/65">
                       {counts[s.key]}
                     </span>
                   )}
                 </div>
-                <p className="truncate text-xs text-white/45">
+                <p className="truncate text-xs text-white/60">
                   {s.description}
                 </p>
               </div>
-              <ArrowRight className="h-4 w-4 text-white/30 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="h-4 w-4 text-white/60 transition-transform group-hover:translate-x-1" />
             </Link>
           );
         })}

@@ -89,7 +89,7 @@ export function Projects({ projects }: { projects: Project[] }) {
               type="button"
               onClick={() => setFilter(cat)}
               className={`relative rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                isActive ? "text-white" : "text-white/55 hover:text-white"
+                isActive ? "text-white" : "text-white/70 hover:text-white"
               }`}
             >
               {isActive && (
@@ -130,9 +130,9 @@ export function Projects({ projects }: { projects: Project[] }) {
               </span>
               <h3 className="mt-2 flex items-center gap-1.5 text-lg font-bold text-white">
                 {p.title}
-                <ArrowUpRight className="h-4 w-4 text-white/40 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-sky-300" />
+                <ArrowUpRight className="h-4 w-4 text-white/60 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-sky-300" />
               </h3>
-              <p className="mt-1 text-xs text-white/40">{p.client}</p>
+              <p className="mt-1 text-xs text-white/60">{p.client}</p>
               <p className="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-white/60">
                 {p.description}
               </p>
@@ -198,7 +198,7 @@ export function Projects({ projects }: { projects: Project[] }) {
                     <div className="text-lg font-bold text-gradient">
                       {m.value}
                     </div>
-                    <div className="text-[11px] text-white/45">{m.label}</div>
+                    <div className="text-[11px] text-white/60">{m.label}</div>
                   </div>
                 ))}
               </div>
@@ -227,7 +227,7 @@ export function Projects({ projects }: { projects: Project[] }) {
                   <h4 className="flex items-center gap-2 text-sm font-semibold text-white">
                     <Layers className="h-4 w-4 text-violet-400" /> Architecture
                   </h4>
-                  <p className="mt-2 text-sm text-white/55">
+                  <p className="mt-2 text-sm text-white/70">
                     {active.architecture}
                   </p>
                 </div>
@@ -236,7 +236,7 @@ export function Projects({ projects }: { projects: Project[] }) {
                     <Lightbulb className="h-4 w-4 text-amber-400" /> Challenge
                     Solved
                   </h4>
-                  <p className="mt-2 text-sm text-white/55">
+                  <p className="mt-2 text-sm text-white/70">
                     {active.challenge}
                   </p>
                 </div>
@@ -273,7 +273,7 @@ export function Projects({ projects }: { projects: Project[] }) {
                   </a>
                 )}
                 {!active.live && !active.github && (
-                  <p className="text-xs text-white/40">
+                  <p className="text-xs text-white/60">
                     Private / client project — details available on request.
                   </p>
                 )}

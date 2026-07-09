@@ -55,7 +55,7 @@ export function About({ about, stats }: { about: AboutType; stats: Stat[] }) {
               <div className="relative text-3xl font-bold text-gradient sm:text-4xl">
                 <Counter to={s.value} suffix={s.suffix} />
               </div>
-              <div className="relative mt-1.5 text-sm text-white/55">
+              <div className="relative mt-1.5 text-sm text-white/70">
                 {s.label}
               </div>
             </motion.div>

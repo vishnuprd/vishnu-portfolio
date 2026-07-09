@@ -64,6 +64,10 @@ const config: Config = {
           "0%": { transform: "scale(0.8)", opacity: "0.6" },
           "100%": { transform: "scale(2.2)", opacity: "0" },
         },
+        loadingbar: {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(400%)" },
+        },
       },
       animation: {
         float: "float 8s ease-in-out infinite",
@@ -72,6 +76,7 @@ const config: Config = {
         "gradient-x": "gradient-x 6s ease infinite",
         marquee: "marquee 40s linear infinite",
         "pulse-ring": "pulse-ring 2.4s cubic-bezier(0.2,0.8,0.2,1) infinite",
+        loadingbar: "loadingbar 1.1s ease-in-out infinite",
       },
     },
   },

@@ -25,7 +25,7 @@ export function Footer({
               {profile.firstName}
               <span className="text-gradient">.dev</span>
             </a>
-            <p className="mt-3 text-sm leading-relaxed text-white/45">
+            <p className="mt-3 text-sm leading-relaxed text-white/60">
               {profile.role} building scalable, production-ready web
               applications end-to-end.
             </p>
@@ -36,7 +36,7 @@ export function Footer({
               <a
                 key={l.href}
                 href={l.href}
-                className="text-sm text-white/55 transition-colors hover:text-white"
+                className="text-sm text-white/70 transition-colors hover:text-white"
               >
                 {l.label}
               </a>
@@ -63,7 +63,7 @@ export function Footer({
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-white/5 pt-6 text-xs text-white/40 sm:flex-row">
+        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-white/5 pt-6 text-xs text-white/60 sm:flex-row">
           <p>
             © {new Date().getFullYear()} {profile.name}. Crafted with Next.js,
             TypeScript & Framer Motion.

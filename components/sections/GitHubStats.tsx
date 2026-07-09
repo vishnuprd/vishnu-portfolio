@@ -88,7 +88,7 @@ export function GitHubStats({ profile }: { profile: Profile }) {
             </div>
           </div>
 
-          <div className="mt-4 flex items-center justify-end gap-1.5 text-[11px] text-white/40">
+          <div className="mt-4 flex items-center justify-end gap-1.5 text-[11px] text-white/60">
             Less
             {cellColor.map((c, i) => (
               <span key={i} className={`h-2.5 w-2.5 rounded-[3px] ${c}`} />
@@ -108,7 +108,7 @@ export function GitHubStats({ profile }: { profile: Profile }) {
                   <div className="mt-2 text-lg font-bold text-white">
                     {k.value}
                   </div>
-                  <div className="text-[11px] text-white/45">{k.label}</div>
+                  <div className="text-[11px] text-white/60">{k.label}</div>
                 </div>
               );
             })}
@@ -125,7 +125,7 @@ export function GitHubStats({ profile }: { profile: Profile }) {
               <div key={lang.name}>
                 <div className="mb-1.5 flex justify-between text-sm">
                   <span className="text-white/70">{lang.name}</span>
-                  <span className="text-white/40">{lang.pct}%</span>
+                  <span className="text-white/60">{lang.pct}%</span>
                 </div>
                 <div className="h-2 overflow-hidden rounded-full bg-white/5">
                   <motion.div

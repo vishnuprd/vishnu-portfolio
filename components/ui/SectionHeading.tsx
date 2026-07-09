@@ -41,7 +41,7 @@ export function SectionHeading({
         <Reveal direction="up" delay={0.16}>
           <p
             className={
-              "mt-4 text-base leading-relaxed text-white/55 sm:text-lg" +
+              "mt-4 text-base leading-relaxed text-white/70 sm:text-lg" +
               (align === "center" ? " mx-auto" : "")
             }
           >

@@ -107,7 +107,7 @@ export function SeedButton() {
               <button
                 onClick={() => state !== "loading" && setOpen(false)}
                 aria-label="Close"
-                className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-white/40 transition-colors hover:bg-white/5 hover:text-white disabled:opacity-40"
+                className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-white/60 transition-colors hover:bg-white/5 hover:text-white disabled:opacity-40"
                 disabled={state === "loading"}
               >
                 <X className="h-4 w-4" />

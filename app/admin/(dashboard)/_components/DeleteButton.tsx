@@ -34,7 +34,7 @@ export function DeleteButton({
     <button
       onClick={onDelete}
       disabled={loading}
-      className="grid h-8 w-8 place-items-center rounded-lg text-white/40 transition-colors hover:bg-red-500/10 hover:text-red-300"
+      className="grid h-8 w-8 place-items-center rounded-lg text-white/60 transition-colors hover:bg-red-500/10 hover:text-red-300"
       aria-label="Delete"
     >
       {loading ? (

@@ -32,7 +32,7 @@ export function CodeScene() {
         <span className="h-3 w-3 rounded-full bg-red-400/80" />
         <span className="h-3 w-3 rounded-full bg-amber-400/80" />
         <span className="h-3 w-3 rounded-full bg-emerald-400/80" />
-        <span className="ml-3 font-mono text-xs text-white/40">
+        <span className="ml-3 font-mono text-xs text-white/60">
           api/handler.ts
         </span>
       </div>
@@ -65,7 +65,7 @@ export function CodeScene() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.6 }}
-          className="mt-4 flex items-center gap-2 border-t border-white/5 pt-3 text-[11px] text-white/40"
+          className="mt-4 flex items-center gap-2 border-t border-white/5 pt-3 text-[11px] text-white/60"
         >
           <span className="relative flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />

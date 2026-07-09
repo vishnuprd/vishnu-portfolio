@@ -33,16 +33,19 @@ export function ThemeSwitcher() {
   }
 
   return (
-    <div className="fixed bottom-6 left-6 z-[70] flex flex-col items-start gap-3">
+    <div className="fixed right-5 top-1/2 z-[70] flex -translate-y-1/2 flex-col items-end gap-3">
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.9 }}
+            initial={{ opacity: 0, x: 12, scale: 0.9 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: 12, scale: 0.9 }}
             transition={{ type: "spring", stiffness: 320, damping: 26 }}
             className="glass-strong flex flex-col gap-1.5 rounded-2xl p-2 shadow-card"
           >
+            <div className="px-3 pb-1 pt-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/60">
+              Accent
+            </div>
             {THEMES.map((t) => (
               <button
                 key={t.id}

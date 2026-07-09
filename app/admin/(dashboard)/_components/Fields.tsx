@@ -41,7 +41,7 @@ export function TagsInput({
               <button
                 type="button"
                 onClick={() => onChange(value.filter((_, j) => j !== i))}
-                className="text-white/40 hover:text-red-300"
+                className="text-white/60 hover:text-red-300"
               >
                 <X className="h-3 w-3" />
               </button>
@@ -60,7 +60,7 @@ export function TagsInput({
         }}
         onBlur={add}
         placeholder="Type and press Enter (or paste comma-separated)"
-        className="w-full bg-transparent px-1.5 py-1 text-sm text-white outline-none placeholder:text-white/30"
+        className="w-full bg-transparent px-1.5 py-1 text-sm text-white outline-none placeholder:text-white/60"
       />
     </div>
   );
@@ -89,7 +89,7 @@ export function ListInput({
           <button
             type="button"
             onClick={() => onChange(value.filter((_, j) => j !== i))}
-            className="shrink-0 rounded-lg border border-white/10 px-2 text-white/40 hover:text-red-300"
+            className="shrink-0 rounded-lg border border-white/10 px-2 text-white/60 hover:text-red-300"
           >
             <X className="h-4 w-4" />
           </button>
@@ -146,7 +146,7 @@ export function MetricsInput({
           <button
             type="button"
             onClick={() => onChange(value.filter((_, j) => j !== i))}
-            className="shrink-0 rounded-lg border border-white/10 px-2 text-white/40 hover:text-red-300"
+            className="shrink-0 rounded-lg border border-white/10 px-2 text-white/60 hover:text-red-300"
           >
             <X className="h-4 w-4" />
           </button>
@@ -299,7 +299,7 @@ export function ImageInput({
         />
       )}
       {value && !isImage && (
-        <p className="mt-1.5 truncate text-xs text-white/40">{value}</p>
+        <p className="mt-1.5 truncate text-xs text-white/60">{value}</p>
       )}
     </div>
   );

@@ -24,6 +24,7 @@ import { useAppReady } from "@/lib/loadState";
 import { ease } from "@/lib/motion";
 import { VelocityMarquee } from "@/components/ui/VelocityMarquee";
 import { DrawUnderline } from "@/components/ui/DrawUnderline";
+import { Parallax } from "@/components/ui/Parallax";
 
 // Orchestrated entrance: the container holds children back until the preloader
 // dismisses (useAppReady), then reveals them in a staggered cascade.
@@ -97,7 +98,11 @@ export function Hero({ profile }: { profile: Profile }) {
       onMouseMove={onMove}
       className="relative flex min-h-screen items-center overflow-hidden pb-32 pt-28 sm:pb-28 md:pb-24 md:pt-24"
     >
-      <Particles className="opacity-70" />
+      {/* Background particle field lags behind on scroll (depth). Oversized so
+          the parallax translate never exposes an edge inside the section. */}
+      <Parallax speed={0.25} className="absolute inset-x-0 -top-[20%] h-[140%]">
+        <Particles className="opacity-70" />
+      </Parallax>
       <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-14 px-5 sm:px-8 lg:grid-cols-[1.05fr_0.95fr]">
         {/* LEFT */}
         <motion.div
@@ -135,7 +140,7 @@ export function Hero({ profile }: { profile: Profile }) {
 
           <motion.p
             variants={item}
-            className="mt-6 max-w-xl text-base leading-relaxed text-white/55 sm:text-lg"
+            className="mt-6 max-w-xl text-base leading-relaxed text-white/70 sm:text-lg"
           >
             {profile.tagline} specializing in React, Next.js, TypeScript,
             Node.js, PostgreSQL, MongoDB, Docker, AWS and cloud architecture.
@@ -150,7 +155,7 @@ export function Hero({ profile }: { profile: Profile }) {
           >
             <span className="text-emerald-400">const</span>
             <span className="text-sky-300">focus</span>
-            <span className="text-white/40">=</span>
+            <span className="text-white/60">=</span>
             <span className="text-amber-300">
               &quot;{typed}
               <span className="ml-0.5 inline-block h-4 w-[2px] animate-pulse bg-sky-400 align-middle" />
@@ -210,7 +215,11 @@ export function Hero({ profile }: { profile: Profile }) {
             style={{ rotateX: rotX, rotateY: rotY, x: tx, y: ty }}
             className="relative [transform-style:preserve-3d]"
           >
-            <CodeScene />
+            {/* Code scene drifts up slightly on scroll — foreground layer,
+                moving opposite the background field for parallax depth. */}
+            <Parallax speed={-0.08}>
+              <CodeScene />
+            </Parallax>
 
             {/* floating stat cards */}
             <motion.div
@@ -224,7 +233,7 @@ export function Hero({ profile }: { profile: Profile }) {
               </div>
               <div>
                 <div className="text-sm font-bold text-white">470+ PRs</div>
-                <div className="text-[11px] text-white/50">Merged in prod</div>
+                <div className="text-[11px] text-white/65">Merged in prod</div>
               </div>
             </motion.div>
 
@@ -240,7 +249,7 @@ export function Hero({ profile }: { profile: Profile }) {
               style={{ transform: "translateZ(80px)" }}
             >
               <div className="text-sm font-bold text-white">3+ yrs</div>
-              <div className="text-[11px] text-white/50">Full-stack shipping</div>
+              <div className="text-[11px] text-white/65">Full-stack shipping</div>
             </motion.div>
           </motion.div>
         </motion.div>

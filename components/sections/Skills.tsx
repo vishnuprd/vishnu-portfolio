@@ -42,7 +42,7 @@ export function Skills({ skillGroups }: { skillGroups: SkillGroup[] }) {
                   <h3 className="text-lg font-semibold text-white">
                     {group.title}
                   </h3>
-                  <p className="text-xs text-white/40">
+                  <p className="text-xs text-white/60">
                     {group.skills.length} technologies
                   </p>
                 </div>

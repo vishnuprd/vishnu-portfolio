@@ -34,7 +34,7 @@ export default async function RecordEditPage({
     <div className="mx-auto max-w-2xl">
       <Link
         href={`/admin/${section.key}`}
-        className="inline-flex items-center gap-1.5 text-sm text-white/50 transition-colors hover:text-white"
+        className="inline-flex items-center gap-1.5 text-sm text-white/65 transition-colors hover:text-white"
       >
         <ArrowLeft className="h-4 w-4" /> Back to {section.label}
       </Link>

@@ -7,8 +7,13 @@ import { SUPABASE_ANON_KEY, SUPABASE_URL, isSupabaseConfigured } from "./config"
  * - Unauthenticated users hitting /admin/* are redirected to /admin/login.
  * - Authenticated users hitting /admin/login are sent to the dashboard.
  */
-export async function updateSession(request: NextRequest) {
-  let response = NextResponse.next({ request });
+export async function updateSession(
+  request: NextRequest,
+  requestHeaders: Headers,
+) {
+  // Forward the (nonce-carrying) headers set by the root middleware so the
+  // admin pages get the same CSP nonce as the public site.
+  let response = NextResponse.next({ request: { headers: requestHeaders } });
 
   const { pathname } = request.nextUrl;
   const isLoginPage = pathname === "/admin/login";
@@ -29,7 +34,7 @@ export async function updateSession(request: NextRequest) {
         cookiesToSet.forEach(({ name, value }) =>
           request.cookies.set(name, value),
         );
-        response = NextResponse.next({ request });
+        response = NextResponse.next({ request: { headers: requestHeaders } });
         cookiesToSet.forEach(({ name, value, options }) =>
           response.cookies.set(name, value, options),
         );

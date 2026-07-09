@@ -66,7 +66,7 @@ export default async function SectionPage({
 
       <div className="mt-6 space-y-2">
         {(!rows || rows.length === 0) && (
-          <p className="rounded-xl border border-dashed border-white/15 p-8 text-center text-sm text-white/40">
+          <p className="rounded-xl border border-dashed border-white/15 p-8 text-center text-sm text-white/60">
             No items yet. Click “New” to add one.
           </p>
         )}
@@ -84,10 +84,10 @@ export default async function SectionPage({
               <div className="min-w-0 flex-1">
                 <h3 className="truncate font-medium text-white">{title}</h3>
                 {subtitle && (
-                  <p className="truncate text-xs text-white/45">{subtitle}</p>
+                  <p className="truncate text-xs text-white/60">{subtitle}</p>
                 )}
               </div>
-              <span className="grid h-8 w-8 place-items-center rounded-lg text-white/40 group-hover:text-white">
+              <span className="grid h-8 w-8 place-items-center rounded-lg text-white/60 group-hover:text-white">
                 <Pencil className="h-4 w-4" />
               </span>
               <DeleteButton
@@ -113,7 +113,7 @@ function Header({
   return (
     <div>
       <h1 className="text-2xl font-bold text-white">{title}</h1>
-      <p className="mt-1 text-sm text-white/50">{description}</p>
+      <p className="mt-1 text-sm text-white/65">{description}</p>
     </div>
   );
 }
