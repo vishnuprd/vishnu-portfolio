@@ -2,14 +2,16 @@
 
 import { motion } from "framer-motion";
 import { Github, GitCommit, GitPullRequest, Star, Flame } from "lucide-react";
-import type { Profile } from "@/lib/types";
+import type { Profile, GitHubStats as GitHubStatsData } from "@/lib/types";
+import { nicePlus } from "@/lib/format";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 
-/* Deterministic contribution grid (no Math.random — stable SSR) */
+/* Deterministic contribution grid — used only as a fallback when live
+   GitHub data isn't available (no Math.random, so SSR stays stable). */
 const WEEKS = 52;
 const DAYS = 7;
-function level(w: number, d: number) {
+function fallbackLevel(w: number, d: number) {
   const v = (w * 7 + d * 13 + ((w * d) % 5) * 17) % 11;
   if (v > 8) return 4;
   if (v > 6) return 3;
@@ -25,22 +27,57 @@ const cellColor = [
   "bg-fuchsia-400",
 ];
 
-const languages = [
-  { name: "TypeScript", pct: 46, color: "from-sky-400 to-blue-500" },
-  { name: "JavaScript", pct: 24, color: "from-amber-300 to-yellow-500" },
-  { name: "CSS / Tailwind", pct: 14, color: "from-cyan-400 to-teal-500" },
-  { name: "Python", pct: 9, color: "from-violet-400 to-purple-500" },
-  { name: "Other", pct: 7, color: "from-fuchsia-400 to-pink-500" },
+/* Hand-tuned fallbacks (rendered when no GITHUB_TOKEN / live fetch fails). */
+type Lang = { name: string; pct: number; className?: string; color?: string };
+const fallbackLanguages: Lang[] = [
+  { name: "TypeScript", pct: 46, className: "from-sky-400 to-blue-500" },
+  { name: "JavaScript", pct: 24, className: "from-amber-300 to-yellow-500" },
+  { name: "CSS / Tailwind", pct: 14, className: "from-cyan-400 to-teal-500" },
+  { name: "Python", pct: 9, className: "from-violet-400 to-purple-500" },
+  { name: "Other", pct: 7, className: "from-fuchsia-400 to-pink-500" },
 ];
 
-const kpis = [
+const fallbackKpis = [
   { icon: GitPullRequest, label: "Pull Requests", value: "470+" },
   { icon: GitCommit, label: "Commits / yr", value: "1.2k+" },
   { icon: Star, label: "Repositories", value: "40+" },
   { icon: Flame, label: "Longest Streak", value: "38 days" },
 ];
 
-export function GitHubStats({ profile }: { profile: Profile }) {
+export function GitHubStats({
+  profile,
+  stats,
+}: {
+  profile: Profile;
+  stats?: GitHubStatsData | null;
+}) {
+  // Prefer live data; otherwise fall back to the curated static values.
+  const kpis = stats
+    ? [
+        {
+          icon: GitPullRequest,
+          label: "Pull Requests",
+          value: nicePlus(stats.totalPRs),
+        },
+        {
+          icon: GitCommit,
+          label: "Commits / yr",
+          value: nicePlus(stats.commitsThisYear),
+        },
+        { icon: Star, label: "Repositories", value: nicePlus(stats.publicRepos) },
+        {
+          icon: Flame,
+          label: "Longest Streak",
+          value: `${stats.longestStreak} days`,
+        },
+      ]
+    : fallbackKpis;
+
+  const languages: Lang[] =
+    stats && stats.languages.length > 0 ? stats.languages : fallbackLanguages;
+
+  const prLabel = stats ? nicePlus(stats.totalPRs) : "470+";
+
   return (
     <section id="github" className="section-pad scroll-mt-24">
       <SectionHeading
@@ -68,10 +105,13 @@ export function GitHubStats({ profile }: { profile: Profile }) {
 
           <div className="mask-fade-x overflow-x-auto pb-2">
             <div className="flex gap-[3px]">
-              {Array.from({ length: WEEKS }).map((_, w) => (
+              {(stats?.calendar ?? Array.from({ length: WEEKS })).map(
+                (week, w) => (
                 <div key={w} className="flex flex-col gap-[3px]">
                   {Array.from({ length: DAYS }).map((_, d) => {
-                    const lvl = level(w, d);
+                    const lvl = stats
+                      ? ((week as number[])[d] ?? 0)
+                      : fallbackLevel(w, d);
                     return (
                       <motion.span
                         key={d}
@@ -137,7 +177,16 @@ export function GitHubStats({ profile }: { profile: Profile }) {
                       delay: 0.2 + i * 0.1,
                       ease: [0.22, 1, 0.36, 1],
                     }}
-                    className={`h-full rounded-full bg-gradient-to-r ${lang.color}`}
+                    className={`h-full rounded-full ${
+                      lang.className ? `bg-gradient-to-r ${lang.className}` : ""
+                    }`}
+                    style={
+                      lang.color
+                        ? {
+                            background: `linear-gradient(90deg, ${lang.color}, ${lang.color}b3)`,
+                          }
+                        : undefined
+                    }
                   />
                 </div>
               </div>
@@ -147,7 +196,8 @@ export function GitHubStats({ profile }: { profile: Profile }) {
           <div className="mt-8 rounded-2xl border border-white/10 bg-gradient-to-br from-sky-500/10 to-violet-500/10 p-5">
             <div className="text-3xl font-bold text-gradient">A+</div>
             <p className="mt-1 text-sm text-white/60">
-              Code quality grade — typed, tested and reviewed across 470+ PRs.
+              Code quality grade — typed, tested and reviewed across {prLabel}{" "}
+              PRs.
             </p>
           </div>
         </Reveal>

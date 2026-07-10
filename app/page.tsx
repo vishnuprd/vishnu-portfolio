@@ -20,6 +20,7 @@ import { Blog } from "@/components/sections/Blog";
 import { Contact } from "@/components/sections/Contact";
 
 import { getSiteContent } from "@/lib/content";
+import { getGitHubStats } from "@/lib/github";
 
 // Admin saves revalidate this instantly; this is just a safety-net refresh
 // for content changed directly in the Supabase dashboard.
@@ -27,6 +28,18 @@ export const revalidate = 3600;
 
 export default async function Home() {
   const content = await getSiteContent();
+  // Live GitHub stats (null when no GITHUB_TOKEN — components fall back).
+  const githubStats = await getGitHubStats(content.profile.githubUser);
+
+  // Sync the "Pull Requests Merged" About stat with the live count (floored
+  // to the nearest 10 to match the "+" style). Falls back to the stored value.
+  const aboutStats = githubStats
+    ? content.stats.map((s) =>
+        /pull request/i.test(s.label)
+          ? { ...s, value: Math.floor(githubStats.totalPRs / 10) * 10 }
+          : s,
+      )
+    : content.stats;
 
   return (
     <>
@@ -39,8 +52,8 @@ export default async function Home() {
       <ThemeSwitcher />
 
       <main id="main" className="relative">
-        <Hero profile={content.profile} />
-        <About about={content.about} stats={content.stats} />
+        <Hero profile={content.profile} githubStats={githubStats} />
+        <About about={content.about} stats={aboutStats} />
         <Skills skillGroups={content.skillGroups} />
         <Experience experience={content.experience} />
         <Projects projects={content.projects} />
@@ -48,7 +61,7 @@ export default async function Home() {
           architectureLayers={content.architectureLayers}
           designPillars={content.designPillars}
         />
-        <GitHubStats profile={content.profile} />
+        <GitHubStats profile={content.profile} stats={githubStats} />
         <Certifications certifications={content.certifications} />
         <Testimonials testimonials={content.testimonials} />
         <Blog blogPosts={content.blogPosts} />
