@@ -16,7 +16,8 @@ import {
   Linkedin,
   Sparkles,
 } from "lucide-react";
-import type { Profile } from "@/lib/types";
+import type { Profile, GitHubStats } from "@/lib/types";
+import { nicePlus } from "@/lib/format";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { CodeScene } from "@/components/CodeScene";
 import { Particles } from "@/components/Particles";
@@ -68,8 +69,15 @@ function useTyping(words: string[]) {
   return text;
 }
 
-export function Hero({ profile }: { profile: Profile }) {
+export function Hero({
+  profile,
+  githubStats,
+}: {
+  profile: Profile;
+  githubStats?: GitHubStats | null;
+}) {
   const typed = useTyping(profile.heroTyping);
+  const prLabel = githubStats ? nicePlus(githubStats.totalPRs) : "470+";
   const ref = useRef<HTMLDivElement>(null);
   const ready = useAppReady();
   const reveal = ready ? "show" : "hidden";
@@ -232,7 +240,7 @@ export function Hero({ profile }: { profile: Profile }) {
                 <Sparkles className="h-4 w-4" />
               </div>
               <div>
-                <div className="text-sm font-bold text-white">470+ PRs</div>
+                <div className="text-sm font-bold text-white">{prLabel} PRs</div>
                 <div className="text-[11px] text-white/65">Merged in prod</div>
               </div>
             </motion.div>
