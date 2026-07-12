@@ -16,8 +16,7 @@ import {
   Linkedin,
   Sparkles,
 } from "lucide-react";
-import type { Profile, GitHubStats } from "@/lib/types";
-import { nicePlus } from "@/lib/format";
+import type { Profile } from "@/lib/types";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { CodeScene } from "@/components/CodeScene";
 import { Particles } from "@/components/Particles";
@@ -69,15 +68,9 @@ function useTyping(words: string[]) {
   return text;
 }
 
-export function Hero({
-  profile,
-  githubStats,
-}: {
-  profile: Profile;
-  githubStats?: GitHubStats | null;
-}) {
+export function Hero({ profile }: { profile: Profile }) {
   const typed = useTyping(profile.heroTyping);
-  const prLabel = githubStats ? nicePlus(githubStats.totalPRs) : "470+";
+  const prLabel = "470+";
   const ref = useRef<HTMLDivElement>(null);
   const ready = useAppReady();
   const reveal = ready ? "show" : "hidden";

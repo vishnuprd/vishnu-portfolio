@@ -116,27 +116,6 @@ export type NavLink = {
   href: string;
 };
 
-/** A single language share for the GitHub "most used languages" bars. */
-export type GitHubLanguage = {
-  name: string;
-  /** Whole-number percentage of total code bytes. */
-  pct: number;
-  /** GitHub's hex color for the language (e.g. "#3178c6"). */
-  color: string;
-};
-
-/** Live stats pulled from the GitHub GraphQL API (see lib/github.ts). */
-export type GitHubStats = {
-  githubUser: string;
-  totalPRs: number;
-  commitsThisYear: number;
-  publicRepos: number;
-  longestStreak: number;
-  /** Contribution heat grid: weeks × 7 days, each a 0–4 level. */
-  calendar: number[][];
-  languages: GitHubLanguage[];
-};
-
 /** The full bundle the public page fetches in one go. */
 export type SiteContent = {
   profile: Profile;
