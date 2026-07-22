@@ -13,19 +13,28 @@ export function Testimonials({
 }) {
   const [index, setIndex] = useState(0);
   const [dir, setDir] = useState(1);
+  // Pause auto-rotation while the user is hovering or keyboard-focused inside
+  // the carousel, so reading isn't interrupted (WCAG 2.2.2).
+  const [paused, setPaused] = useState(false);
 
   const go = useCallback(
     (d: number) => {
       setDir(d);
       setIndex((i) => (i + d + testimonials.length) % testimonials.length);
     },
-    []
+    [testimonials.length]
   );
 
   useEffect(() => {
+    // Never auto-advance for users who prefer reduced motion.
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (reduced || paused) return;
+
     const t = setInterval(() => go(1), 6000);
     return () => clearInterval(t);
-  }, [go]);
+  }, [go, paused]);
 
   const t = testimonials[index];
 
@@ -36,8 +45,20 @@ export function Testimonials({
         title="What teams say about working with me"
       />
 
-      <div className="relative mx-auto max-w-3xl">
-        <div className="relative min-h-[280px] sm:min-h-[240px]">
+      <div
+        className="relative mx-auto max-w-3xl"
+        role="group"
+        aria-roledescription="carousel"
+        aria-label="Testimonials"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        onFocusCapture={() => setPaused(true)}
+        onBlurCapture={() => setPaused(false)}
+      >
+        <div
+          className="relative min-h-[280px] sm:min-h-[240px]"
+          aria-live="polite"
+        >
           <AnimatePresence mode="wait" custom={dir}>
             <motion.blockquote
               key={index}

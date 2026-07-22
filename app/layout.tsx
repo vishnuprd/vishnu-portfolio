@@ -67,6 +67,31 @@ export default async function RootLayout({
   // allowed under the nonce-based CSP (no more script-src 'unsafe-inline').
   const nonce = (await headers()).get("x-nonce") ?? undefined;
 
+  const { profile } = await getSiteContent();
+  const personLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: profile.name,
+    url: "https://vishnuprd.dev",
+    image: "https://vishnuprd.dev/opengraph-image",
+    jobTitle: profile.role,
+    email: `mailto:${profile.email}`,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: profile.location,
+    },
+    sameAs: [profile.github, profile.linkedin].filter(Boolean),
+    knowsAbout: [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Node.js",
+      "PostgreSQL",
+      "System Design",
+      "Cloud Architecture",
+    ],
+  };
+
   return (
     <html
       lang="en"
@@ -83,6 +108,11 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem('portfolio-theme');if(t){document.documentElement.dataset.theme=t;}}catch(e){}})();`,
           }}
+        />
+        <script
+          type="application/ld+json"
+          nonce={nonce}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personLd) }}
         />
       </head>
       <body className="font-sans antialiased">
