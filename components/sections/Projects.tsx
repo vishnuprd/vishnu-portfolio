@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowUpRight,
@@ -71,6 +71,16 @@ export function Projects({ projects }: { projects: Project[] }) {
     [projects, filter]
   );
 
+  // Close the detail dialog on Escape and lock body scroll while it's open.
+  useEffect(() => {
+    if (!active) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActive(null);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [active]);
+
   return (
     <section id="projects" className="section-pad scroll-mt-24">
       <SectionHeading
@@ -118,7 +128,17 @@ export function Projects({ projects }: { projects: Project[] }) {
               transition={spring.soft}
               whileHover={{ y: -8 }}
               onClick={() => setActive(p)}
-              className="group relative flex cursor-pointer flex-col overflow-hidden rounded-3xl glass p-3 transition-colors duration-300 hover:border-white/20 hover:shadow-card"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setActive(p);
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              aria-haspopup="dialog"
+              aria-label={`${p.title} — ${p.category}. View case study details.`}
+              className="group relative flex cursor-pointer flex-col overflow-hidden rounded-3xl glass p-3 transition-colors duration-300 hover:border-white/20 hover:shadow-card focus-visible:border-white/20 focus-visible:shadow-card"
               data-cursor="hover"
             >
               <Spotlight />
@@ -166,6 +186,9 @@ export function Projects({ projects }: { projects: Project[] }) {
             <div className="absolute inset-0 bg-black/70 backdrop-blur-md" />
             <motion.div
               onClick={(e) => e.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
+              aria-label={`${active.title} case study`}
               className="glass-strong relative z-10 max-h-[88vh] w-full max-w-2xl overflow-y-auto rounded-3xl p-6 shadow-card sm:p-8"
             >
               <button

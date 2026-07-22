@@ -5,8 +5,10 @@ import { afterEach, vi } from "vitest";
 afterEach(() => cleanup());
 
 // jsdom lacks these browser APIs that Framer Motion / our components touch.
-// Stub them so component renders don't crash.
-if (!("matchMedia" in window)) {
+// Stub them so component renders don't crash. Guard on the type (not just
+// presence) so we still install the stub when jsdom exposes a non-callable
+// matchMedia — otherwise components like Spotlight throw on mount.
+if (typeof window.matchMedia !== "function") {
   Object.defineProperty(window, "matchMedia", {
     writable: true,
     value: (query: string) => ({
